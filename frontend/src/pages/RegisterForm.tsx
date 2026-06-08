@@ -39,7 +39,7 @@ export const RegisterForm: React.FC = () => {
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, '');
     if (value.length > 11) value = value.slice(0, 11);
-    
+
     if (value.length > 9) {
       value = `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6, 9)}-${value.slice(9)}`;
     } else if (value.length > 6) {
@@ -47,14 +47,14 @@ export const RegisterForm: React.FC = () => {
     } else if (value.length > 3) {
       value = `${value.slice(0, 3)}.${value.slice(3)}`;
     }
-    
+
     setCpf(value);
   };
 
   // Algoritmo Oficial de Validação de CPF
   const validateCpf = (cpfStr: string): boolean => {
     const cleanCpf = cpfStr.replace(/\D/g, '');
-    
+
     if (cleanCpf.length !== 11) return false;
     if (/^(\d)\1{10}$/.test(cleanCpf)) return false; // dígitos todos iguais
 
@@ -64,7 +64,7 @@ export const RegisterForm: React.FC = () => {
     for (let i = 1; i <= 9; i++) {
       sum += parseInt(cleanCpf.substring(i - 1, i)) * (11 - i);
     }
-    
+
     remainder = (sum * 10) % 11;
     if (remainder === 10 || remainder === 11) remainder = 0;
     if (remainder !== parseInt(cleanCpf.substring(9, 10))) return false;
@@ -73,7 +73,7 @@ export const RegisterForm: React.FC = () => {
     for (let i = 1; i <= 10; i++) {
       sum += parseInt(cleanCpf.substring(i - 1, i)) * (12 - i);
     }
-    
+
     remainder = (sum * 10) % 11;
     if (remainder === 10 || remainder === 11) remainder = 0;
     if (remainder !== parseInt(cleanCpf.substring(10, 11))) return false;
@@ -152,10 +152,10 @@ export const RegisterForm: React.FC = () => {
 
             <div className="form-group">
               <label className="form-label">Nome Completo</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                placeholder="Ex: João da Silva" 
+              <input
+                type="text"
+                className="form-input"
+                placeholder="Ex: João da Silva"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
@@ -165,10 +165,10 @@ export const RegisterForm: React.FC = () => {
             <div style={styles.formRow}>
               <div className="form-group" style={{ flex: 1 }}>
                 <label className="form-label">E-mail</label>
-                <input 
-                  type="email" 
-                  className="form-input" 
-                  placeholder="joao@email.com" 
+                <input
+                  type="email"
+                  className="form-input"
+                  placeholder="joao@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -176,10 +176,10 @@ export const RegisterForm: React.FC = () => {
               </div>
               <div className="form-group" style={{ flex: 1 }}>
                 <label className="form-label">Senha</label>
-                <input 
-                  type="password" 
-                  className="form-input" 
-                  placeholder="Mínimo 6 caracteres" 
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder="Mínimo 6 caracteres"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -190,10 +190,10 @@ export const RegisterForm: React.FC = () => {
             <div style={styles.formRow}>
               <div className="form-group" style={{ flex: 1 }}>
                 <label className="form-label">CPF (Apenas Números)</label>
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  placeholder="123.456.789-00" 
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="123.456.789-00"
                   value={cpf}
                   onChange={handleCpfChange}
                   required
@@ -201,10 +201,10 @@ export const RegisterForm: React.FC = () => {
               </div>
               <div className="form-group" style={{ flex: 1 }}>
                 <label className="form-label">Telefone (Opcional)</label>
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  placeholder="(11) 99999-9999" 
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="(11) 99999-9999"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -221,10 +221,10 @@ export const RegisterForm: React.FC = () => {
 
                 <div className="form-group">
                   <label className="form-label">Nome Comercial / Nome Fantasia</label>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    placeholder="Ex: Elétrica Rápida João" 
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Ex: Elétrica Rápida João"
                     value={businessName}
                     onChange={(e) => setBusinessName(e.target.value)}
                     required
@@ -233,8 +233,8 @@ export const RegisterForm: React.FC = () => {
 
                 <div className="form-group">
                   <label className="form-label">Categoria de Serviço</label>
-                  <select 
-                    className="form-input" 
+                  <select
+                    className="form-input"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     style={{ appearance: 'auto', cursor: 'pointer' }}
@@ -247,9 +247,9 @@ export const RegisterForm: React.FC = () => {
 
                 <div className="form-group">
                   <label className="form-label">Descrição do Escopo do seu Trabalho</label>
-                  <textarea 
-                    className="form-input" 
-                    placeholder="Explique o tipo de serviço que realiza, qualificações..." 
+                  <textarea
+                    className="form-input"
+                    placeholder="Explique o tipo de serviço que realiza, qualificações..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
@@ -339,10 +339,10 @@ export const RegisterForm: React.FC = () => {
                   <span>Área de Cobertura (Geolocalização)</span>
                 </div>
 
-                <MapPicker 
-                  lat={lat} 
-                  lng={lng} 
-                  radiusKm={radius} 
+                <MapPicker
+                  lat={lat}
+                  lng={lng}
+                  radiusKm={radius}
                   onChange={(newLat, newLng) => {
                     setLat(newLat);
                     setLng(newLng);
@@ -352,10 +352,10 @@ export const RegisterForm: React.FC = () => {
                 <div style={styles.formRow}>
                   <div className="form-group" style={{ flex: 1 }}>
                     <label className="form-label">Latitude Central</label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       step="any"
-                      className="form-input" 
+                      className="form-input"
                       value={lat}
                       onChange={(e) => setLat(Number(e.target.value))}
                       required
@@ -363,10 +363,10 @@ export const RegisterForm: React.FC = () => {
                   </div>
                   <div className="form-group" style={{ flex: 1 }}>
                     <label className="form-label">Longitude Central</label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       step="any"
-                      className="form-input" 
+                      className="form-input"
                       value={lng}
                       onChange={(e) => setLng(Number(e.target.value))}
                       required
@@ -376,11 +376,11 @@ export const RegisterForm: React.FC = () => {
 
                 <div className="form-group">
                   <label className="form-label">Raio de Atendimento: <strong>{radius} km</strong></label>
-                  <input 
-                    type="range" 
-                    min="1" 
-                    max="50" 
-                    value={radius} 
+                  <input
+                    type="range"
+                    min="1"
+                    max="50"
+                    value={radius}
                     onChange={(e) => setRadius(Number(e.target.value))}
                     style={{ width: '100%', accentColor: '#0046C0', cursor: 'pointer' }}
                   />

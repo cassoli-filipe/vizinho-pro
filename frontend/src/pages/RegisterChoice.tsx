@@ -20,7 +20,7 @@ export const RegisterChoice: React.FC = () => {
           <div style={styles.card}>
             <div style={styles.cardInner}>
               <div style={styles.iconContainerMorador}>
-                <UserCheck size={28} color="#0046C0" />
+                <UserCheck size={28} color="var(--primary)" />
               </div>
               <h2 style={styles.cardTitle}>Sou Morador</h2>
               <p style={styles.cardText}>
@@ -30,13 +30,13 @@ export const RegisterChoice: React.FC = () => {
               <div style={styles.checklist}>
                 <div style={styles.checkItem}>
                   <div style={styles.checkIcon}>
-                    <Check size={14} color="#0046C0" />
+                    <Check size={14} color="var(--primary)" />
                   </div>
                   <span style={styles.checkText}>Acesso a profissionais verificados</span>
                 </div>
                 <div style={styles.checkItem}>
                   <div style={styles.checkIcon}>
-                    <Check size={14} color="#0046C0" />
+                    <Check size={14} color="var(--primary)" />
                   </div>
                   <span style={styles.checkText}>Leia e deixe avaliações reais</span>
                 </div>
@@ -66,11 +66,11 @@ export const RegisterChoice: React.FC = () => {
 
               <div style={styles.badgesContainer}>
                 <div style={styles.badgeItemBlue}>
-                  <DollarSign size={14} color="#0046C0" />
+                  <DollarSign size={14} color="var(--primary)" />
                   <span style={styles.badgeTextBlue}>Mensalidade de apenas R$20,00</span>
                 </div>
                 <div style={styles.badgeItemGray}>
-                  <MapPin size={14} color="#475569" />
+                  <MapPin size={14} color="var(--gray-500)" />
                   <span style={styles.badgeTextGray}>Defina sua área de atuação</span>
                 </div>
               </div>
@@ -94,7 +94,8 @@ export const RegisterChoice: React.FC = () => {
 const styles: Record<string, React.CSSProperties> = {
   pageContainer: {
     padding: '80px 0 100px 0',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: 'var(--bg)',
+    backgroundImage: 'radial-gradient(ellipse at 50% -20%, var(--brand-100) 0%, transparent 70%)',
     flex: '1',
     display: 'flex',
     alignItems: 'center',
@@ -112,14 +113,14 @@ const styles: Record<string, React.CSSProperties> = {
   },
   title: {
     fontSize: '36px',
-    fontWeight: '700',
-    color: '#0F172A',
+    fontWeight: '800',
+    color: 'var(--text-primary)',
     marginBottom: '16px',
     letterSpacing: '-1px',
   },
   subtitle: {
     fontSize: '16px',
-    color: '#64748B',
+    color: 'var(--text-secondary)',
     lineHeight: '1.6',
   },
   cardsGrid: {
@@ -130,14 +131,15 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: '960px',
   },
   card: {
-    backgroundColor: 'white',
-    borderRadius: '24px', // Borda super arredondada premium como no protótipo
-    border: '1px solid #E2E8F0',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backdropFilter: 'blur(12px)',
+    borderRadius: 'var(--radius-xl)',
+    border: '1px solid rgba(255, 255, 255, 0.5)',
+    boxShadow: 'var(--shadow-md)',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    transition: 'var(--ease)',
   },
   cardInner: {
     padding: '40px',
@@ -146,119 +148,22 @@ const styles: Record<string, React.CSSProperties> = {
     flex: '1',
   },
   iconContainerMorador: {
-    width: '56px',
-    height: '56px',
-    borderRadius: '16px',
-    backgroundColor: '#EEF2F6',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '24px',
+    width: '56px', height: '56px', borderRadius: '16px', backgroundColor: 'var(--brand-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px',
   },
   iconContainerPrestador: {
-    width: '56px',
-    height: '56px',
-    borderRadius: '16px',
-    backgroundColor: '#0046C0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '24px',
+    width: '56px', height: '56px', borderRadius: '16px', background: 'var(--gradient-neon)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', boxShadow: 'var(--shadow-neon-cyan)'
   },
-  cardTitle: {
-    fontSize: '22px',
-    fontWeight: '700',
-    color: '#0F172A',
-    marginBottom: '12px',
-  },
-  cardText: {
-    fontSize: '14px',
-    color: '#64748B',
-    lineHeight: '1.6',
-    marginBottom: '24px',
-    minHeight: '68px',
-  },
-  checklist: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-    marginBottom: '32px',
-    flex: '1',
-  },
-  checkItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-  },
-  checkIcon: {
-    width: '20px',
-    height: '20px',
-    borderRadius: '50%',
-    backgroundColor: '#E6EEFF',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkText: {
-    fontSize: '13px',
-    fontWeight: '500',
-    color: '#475569',
-  },
-  badgesContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    marginBottom: '32px',
-    flex: '1',
-  },
-  badgeItemBlue: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    backgroundColor: '#EFF6FF', // Fundo azul claro exato do protótipo
-    padding: '10px 14px',
-    borderRadius: '8px',
-    border: '1px solid #DBEAFE',
-  },
-  badgeTextBlue: {
-    fontSize: '12px',
-    fontWeight: '600',
-    color: '#0046C0',
-  },
-  badgeItemGray: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    backgroundColor: '#F1F5F9', // Fundo cinza claro exato do protótipo
-    padding: '10px 14px',
-    borderRadius: '8px',
-    border: '1px solid #E2E8F0',
-  },
-  badgeTextGray: {
-    fontSize: '12px',
-    fontWeight: '600',
-    color: '#475569',
-  },
-  btnMorador: {
-    width: '100%',
-    padding: '14px 20px',
-    borderRadius: '8px',
-    backgroundColor: '#E2E8F0', // Botão cinza claro no protótipo
-    color: '#475569',
-    fontWeight: '600',
-    fontSize: '14px',
-    justifyContent: 'center',
-    gap: '8px',
-  },
-  btnPrestador: {
-    width: '100%',
-    padding: '14px 20px',
-    borderRadius: '8px',
-    backgroundColor: '#0046C0', // Botão azul no protótipo
-    color: 'white',
-    fontWeight: '600',
-    fontSize: '14px',
-    justifyContent: 'center',
-    gap: '8px',
-  },
+  cardTitle: { fontSize: '22px', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '12px' },
+  cardText: { fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '24px', minHeight: '68px' },
+  checklist: { display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px', flex: '1' },
+  checkItem: { display: 'flex', alignItems: 'center', gap: '10px' },
+  checkIcon: { width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'var(--brand-100)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  checkText: { fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)' },
+  badgesContainer: { display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '32px', flex: '1' },
+  badgeItemBlue: { display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--brand-50)', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--brand-100)' },
+  badgeTextBlue: { fontSize: '12px', fontWeight: '600', color: 'var(--primary)' },
+  badgeItemGray: { display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--gray-50)', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border)' },
+  badgeTextGray: { fontSize: '12px', fontWeight: '600', color: 'var(--gray-600)' },
+  btnMorador: { width: '100%', padding: '14px 20px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-100)', color: 'var(--text-primary)', fontWeight: '700', fontSize: '14px', justifyContent: 'center', gap: '8px' },
+  btnPrestador: { width: '100%', padding: '14px 20px', borderRadius: 'var(--radius-sm)', background: 'var(--gradient-brand)', color: 'white', fontWeight: '700', fontSize: '14px', justifyContent: 'center', gap: '8px', boxShadow: 'var(--shadow-brand)' },
 };

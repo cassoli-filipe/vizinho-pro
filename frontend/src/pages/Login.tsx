@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Building2 } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
 export const Login: React.FC = () => {
   const { login } = useAuth();
@@ -36,11 +36,13 @@ export const Login: React.FC = () => {
     <div style={styles.page} className="fade-in">
       <div style={styles.card}>
         <div style={styles.logoRow}>
-          <Building2 size={28} color="var(--primary-color)" />
-          <span style={styles.logoText}>CondoServ</span>
+          <div style={styles.logoIconWrap}>
+            <MapPin size={20} color="white" />
+          </div>
+          <span style={styles.logoText}>Vizinho<span style={styles.logoPro}>Pro</span></span>
         </div>
 
-        <h2 style={styles.title}>Entre no CondoServ</h2>
+        <h2 style={styles.title}>Entre no VizinhoPro</h2>
         <p style={styles.subtitle}>Digite seus dados para acessar sua conta</p>
 
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -89,17 +91,19 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '80px 20px',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: 'var(--bg)',
+    backgroundImage: 'radial-gradient(ellipse at 50% -20%, var(--brand-100) 0%, transparent 70%)',
     flex: '1',
   },
   card: {
-    backgroundColor: 'white',
-    borderRadius: '16px',
-    border: '1px solid var(--border-color)',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backdropFilter: 'blur(12px)',
+    borderRadius: 'var(--radius-xl)',
+    border: '1px solid rgba(255, 255, 255, 0.5)',
     padding: '40px',
     width: '100%',
     maxWidth: '440px',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
+    boxShadow: 'var(--shadow-md)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -107,20 +111,34 @@ const styles: Record<string, React.CSSProperties> = {
   logoRow: {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '10px',
     marginBottom: '24px',
   },
+  logoIconWrap: {
+    width: '38px',
+    height: '38px',
+    borderRadius: '12px',
+    background: 'var(--gradient-neon)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: 'var(--shadow-neon-cyan)',
+  },
   logoText: {
-    fontSize: '22px',
-    fontWeight: '700',
-    color: '#0046C0',
+    fontSize: '24px',
+    fontWeight: '800',
+    color: 'var(--text-primary)',
     letterSpacing: '-0.5px',
   },
+  logoPro: {
+    color: 'var(--primary)',
+  },
   title: {
-    fontSize: '20px',
-    fontWeight: '700',
-    color: '#0F172A',
+    fontSize: '22px',
+    fontWeight: '800',
+    color: 'var(--text-primary)',
     marginBottom: '6px',
+    letterSpacing: '-0.5px',
   },
   subtitle: {
     fontSize: '13px',
@@ -133,15 +151,15 @@ const styles: Record<string, React.CSSProperties> = {
   },
   submitBtn: {
     width: '100%',
-    padding: '12px',
-    fontWeight: '600',
-    borderRadius: '6px',
+    padding: '13px',
+    fontWeight: '700',
+    borderRadius: 'var(--radius-sm)',
     cursor: 'pointer',
     marginTop: '8px',
   },
   errorText: {
     fontSize: '13px',
-    color: 'red',
+    color: 'var(--danger)',
     marginBottom: '12px',
   },
   footerLink: {
@@ -149,7 +167,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-secondary)',
   },
   registerLink: {
-    color: '#0046C0',
+    color: 'var(--primary)',
     fontWeight: '600',
   }
 };

@@ -1,39 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import 'leaflet/dist/leaflet.css';
 
 /* =========================================================
-   VIZINHOPRO — DESIGN SYSTEM TOKENS
+   VIZINHOPRO — DESIGN SYSTEM TOKENS (NEON LIGHT THEME)
    ========================================================= */
 :root {
   /* — Tipografia — */
-  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --text-xs:   11px;
-  --text-sm:   13px;
-  --text-base: 15px;
-  --text-md:   17px;
-  --text-lg:   20px;
-  --text-xl:   24px;
-  --text-2xl:  30px;
-  --text-3xl:  38px;
-  --text-4xl:  48px;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --text-xs:   12px;
+  --text-sm:   14px;
+  --text-base: 16px;
+  --text-md:   18px;
+  --text-lg:   22px;
+  --text-xl:   26px;
+  --text-2xl:  32px;
+  --text-3xl:  42px;
+  --text-4xl:  56px;
 
-  /* — Paleta Principal (Azul VizinhoPro) — */
-  --brand-50:   #E6EEFF;
-  --brand-100:  #C1D0FF;
-  --brand-200:  #8FAEFF;
-  --brand-300:  #5C8CFF;
-  --brand-400:  #2966F5;
-  --brand-500:  #0046C0;   /* primary */
-  --brand-600:  #003796;
-  --brand-700:  #002566;   /* secondary / dark */
-  --brand-800:  #001740;
-  --brand-900:  #000D26;
+  /* — Paleta Principal (Neon / Vibrant) — */
+  --brand-50:   #F0F5FF;
+  --brand-100:  #E0EDFF;
+  --brand-200:  #B8D6FF;
+  --brand-300:  #8AB8FF;
+  --brand-400:  #5C95FF;
+  --brand-500:  #2B5BFF;   /* Primary Vibrant Blue */
+  --brand-600:  #1D3DDF;
+  --brand-700:  #1227B0;
+  --brand-800:  #0A1780;
+  --brand-900:  #050C50;
+
+  /* — Acentos Neon — */
+  --neon-cyan:  #00F0FF;
+  --neon-pink:  #FF00D4;
+  --neon-lime:  #00FF85;
 
   /* — Aliases semânticos — */
   --primary:          var(--brand-500);
   --primary-hover:    var(--brand-600);
   --primary-light:    var(--brand-50);
-  --secondary:        var(--brand-700);
+  --secondary:        var(--gray-900);
+  --accent:           var(--neon-cyan);
 
   /* — Neutros — */
   --gray-50:  #F8FAFC;
@@ -61,11 +68,11 @@
   --info-bg:     #EFF6FF;
   --info-text:   #1E40AF;
 
-  /* — Superfícies — */
-  --bg:          var(--gray-50);
+  /* — Superfícies Claras Premium — */
+  --bg:          #FAFCFF; /* Levemente azulado/gelo */
   --surface:     #FFFFFF;
-  --surface-2:   var(--gray-100);
-  --border:      var(--gray-200);
+  --surface-2:   #F3F7FC;
+  --border:      #E4EEF7;
   --border-focus:var(--brand-400);
 
   /* — Texto — */
@@ -88,33 +95,36 @@
   --space-20: 80px;
   --space-24: 96px;
 
-  /* — Bordas — */
-  --radius-sm:   6px;
-  --radius-md:   12px;
-  --radius-lg:   16px;
-  --radius-xl:   24px;
+  /* — Bordas e Formas Arredondadas — */
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-xl:   32px;
   --radius-full: 9999px;
 
   /* — Sombras Premium — */
-  --shadow-xs:  0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-sm:  0 2px 6px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-md:  0 4px 16px rgba(15, 23, 42, 0.10), 0 2px 6px rgba(15, 23, 42, 0.06);
-  --shadow-lg:  0 12px 32px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.06);
-  --shadow-xl:  0 24px 48px rgba(15, 23, 42, 0.15), 0 8px 24px rgba(15, 23, 42, 0.08);
-  --shadow-brand: 0 8px 24px rgba(0, 70, 192, 0.25);
-  --shadow-brand-lg: 0 16px 40px rgba(0, 70, 192, 0.30);
+  --shadow-xs:  0 2px 4px rgba(10, 23, 128, 0.04);
+  --shadow-sm:  0 4px 12px rgba(10, 23, 128, 0.06), 0 2px 4px rgba(10, 23, 128, 0.04);
+  --shadow-md:  0 8px 24px rgba(10, 23, 128, 0.08), 0 4px 10px rgba(10, 23, 128, 0.06);
+  --shadow-lg:  0 16px 40px rgba(10, 23, 128, 0.10), 0 8px 16px rgba(10, 23, 128, 0.06);
+  --shadow-xl:  0 24px 60px rgba(10, 23, 128, 0.15), 0 12px 24px rgba(10, 23, 128, 0.08);
+  
+  /* Sombras Coloridas/Neon */
+  --shadow-brand: 0 10px 30px rgba(43, 91, 255, 0.3);
+  --shadow-brand-lg: 0 20px 50px rgba(43, 91, 255, 0.4);
+  --shadow-neon-cyan: 0 0 20px rgba(0, 240, 255, 0.4);
+  --shadow-neon-pink: 0 0 20px rgba(255, 0, 212, 0.4);
 
-  /* — Gradientes — */
-  --gradient-brand: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-700) 100%);
-  --gradient-brand-soft: linear-gradient(135deg, var(--brand-400) 0%, var(--brand-600) 100%);
-  --gradient-dark: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-  --gradient-hero: linear-gradient(135deg, var(--brand-700) 0%, #001240 50%, var(--brand-800) 100%);
+  /* — Gradientes Vibrantes — */
+  --gradient-brand: linear-gradient(135deg, var(--brand-400) 0%, var(--brand-600) 100%);
+  --gradient-neon: linear-gradient(135deg, var(--brand-500) 0%, var(--neon-cyan) 100%);
+  --gradient-hero: linear-gradient(135deg, #FAFCFF 0%, #E0EDFF 100%);
 
-  /* — Transições — */
-  --ease-fast:   all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --ease:        all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-slow:   all 0.40s cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-spring: all 0.30s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* — Transições Fluidas — */
+  --ease-fast:   all 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+  --ease:        all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-slow:   all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* =========================================================
@@ -131,12 +141,18 @@ html {
 }
 
 body {
-  font-family: var(--font-family);
+  font-family: var(--font-sans);
   background-color: var(--bg);
   color: var(--text-primary);
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 a {
@@ -294,9 +310,10 @@ img {
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: var(--shadow-brand-lg);
+  background: var(--gradient-neon); /* Glow effect on hover */
 }
 .btn-primary:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
   box-shadow: var(--shadow-brand);
 }
 
@@ -446,11 +463,22 @@ img {
    CARDS
    ========================================================= */
 .card {
-  background-color: var(--surface);
+  background-color: rgba(255, 255, 255, 0.85); /* Slightly transparent for glassmorphism */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   padding: var(--space-6);
   box-shadow: var(--shadow-sm);
+}
+
+/* Utilitário Glassmorphism global */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-md);
 }
 
 /* Provider card hover */

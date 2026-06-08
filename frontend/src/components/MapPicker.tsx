@@ -3,30 +3,32 @@ import { MapContainer, TileLayer, Marker, Circle, useMapEvents } from 'react-lea
 import L from 'leaflet';
 import { Navigation } from 'lucide-react';
 
-// Redefinir o ícone do marcador padrão para evitar bugs do Vite com arquivos estáticos
+// Pin de localização elegante com gradiente
 const customIcon = L.divIcon({
-  className: 'custom-leaflet-pin',
-  iconAnchor: [10, 24], // Ancorado na base inferior do pin
-  popupAnchor: [0, -24],
+  className: '',
+  iconSize: [40, 48],
+  iconAnchor: [20, 48],
+  popupAnchor: [0, -50],
   html: `
     <div style="
-      background-color: #0046C0;
-      width: 24px;
-      height: 24px;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      position: relative;
+      width: 40px;
+      height: 48px;
+      filter: drop-shadow(0 4px 10px rgba(0,70,192,0.4));
     ">
-      <div style="
-        width: 8px;
-        height: 8px;
-        background-color: white;
-        border-radius: 50%;
-      "></div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 48" width="40" height="48">
+        <defs>
+          <linearGradient id="locationPinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0046C0;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M20 2C11.16 2 4 9.16 4 18c0 11 16 28 16 28s16-17 16-28C36 9.16 28.84 2 20 2z"
+              fill="url(#locationPinGrad)" />
+        <circle cx="20" cy="18" r="10" fill="white" opacity="0.95"/>
+        <circle cx="20" cy="18" r="5" fill="#0046C0"/>
+        <circle cx="20" cy="18" r="2.5" fill="white"/>
+      </svg>
     </div>
   `
 });
@@ -111,8 +113,10 @@ export const MapPicker: React.FC<MapPickerProps> = ({
           ref={mapRef as any}
         >
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            subdomains="abcd"
+            maxZoom={20}
           />
           
           <MapEventsHelper onMapClick={handleMapClick} readOnly={readOnly} />
@@ -131,10 +135,11 @@ export const MapPicker: React.FC<MapPickerProps> = ({
             center={[lat, lng]}
             radius={radiusKm * 1000} // metros
             pathOptions={{
-              color: '#0046C0',
-              fillColor: '#0046C0',
+              color: '#00F0FF',
+              fillColor: '#2B5BFF',
               fillOpacity: 0.15,
-              weight: 2
+              weight: 2,
+              dashArray: '4 4'
             }}
           />
         </MapContainer>

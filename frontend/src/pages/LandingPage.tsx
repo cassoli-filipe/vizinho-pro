@@ -163,7 +163,7 @@ export const LandingPage: React.FC = () => {
               <button
                 onClick={() => navigate('/register/prestador')}
                 className="btn btn-lg"
-                style={{ backgroundColor: 'rgba(255,255,255,0.12)', color: 'white', border: '1.5px solid rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)' }}
+                style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)', color: 'var(--brand-700)', border: '1.5px solid rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(4px)' }}
               >
                 Sou Prestador
               </button>
@@ -173,7 +173,7 @@ export const LandingPage: React.FC = () => {
               {[4.9, 4.8, 4.7].map((r, i) => (
                 <div key={i} style={styles.proofAvatar}>
                   <Star size={10} fill="var(--warning)" color="var(--warning)" />
-                  <span style={{ fontSize: '10px', fontWeight: '700', color: 'rgba(255,255,255,0.9)' }}>{r}</span>
+                  <span style={{ fontSize: '10px', fontWeight: '700', color: 'var(--brand-900)' }}>{r}</span>
                 </div>
               ))}
               <span style={styles.proofText}>+2.400 avaliações verificadas</span>
@@ -372,25 +372,27 @@ const styles: Record<string, React.CSSProperties> = {
     border: '1px solid rgba(245,158,11,0.3)',
     borderRadius: 'var(--radius-full)',
     fontSize: '12px',
-    fontWeight: '600',
-    color: 'rgba(255,255,255,0.95)',
+    fontWeight: '700',
+    color: 'var(--warning-text)',
     width: 'fit-content',
   },
   heroTitle: {
     fontSize: 'clamp(30px, 4vw, 48px)',
     fontWeight: '800',
     lineHeight: '1.12',
-    color: 'white',
+    color: 'var(--brand-900)',
     letterSpacing: '-1.5px',
+    textShadow: '0 4px 20px rgba(43, 91, 255, 0.1)',
   },
   heroHighlight: {
-    background: 'linear-gradient(90deg, #5C8CFF, #8FAEFF)',
+    background: 'linear-gradient(90deg, var(--brand-500), var(--brand-400))',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
   },
   heroSub: {
     fontSize: '16px',
-    color: 'rgba(255,255,255,0.75)',
+    color: 'var(--brand-700)',
+    fontWeight: '500',
     lineHeight: '1.65',
     maxWidth: '520px',
   },
@@ -408,14 +410,15 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     gap: '3px',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(255,255,255,0.6)',
     padding: '4px 8px',
     borderRadius: 'var(--radius-full)',
+    border: '1px solid rgba(255,255,255,0.8)',
   },
   proofText: {
     fontSize: '12px',
-    color: 'rgba(255,255,255,0.65)',
-    fontWeight: '500',
+    color: 'var(--brand-700)',
+    fontWeight: '600',
   },
   heroRight: {
     flex: '0 0 420px',

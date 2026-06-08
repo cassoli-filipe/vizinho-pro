@@ -47,8 +47,9 @@ export const Header: React.FC = () => {
         style={{
           ...styles.header,
           boxShadow: scrolled ? 'var(--shadow-md)' : 'none',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          backgroundColor: scrolled ? 'rgba(255,255,255,0.92)' : 'white',
+          backdropFilter: scrolled ? 'blur(16px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+          backgroundColor: scrolled ? 'rgba(255,255,255,0.75)' : 'white',
         }}
       >
         <div className="container" style={styles.container}>
@@ -184,12 +185,12 @@ const styles: Record<string, React.CSSProperties> = {
   logoIconWrap: {
     width: '32px',
     height: '32px',
-    borderRadius: '9px',
-    background: 'var(--gradient-brand)',
+    borderRadius: '10px',
+    background: 'var(--gradient-neon)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: '0 2px 8px rgba(0,70,192,0.3)',
+    boxShadow: 'var(--shadow-neon-cyan)',
   },
   logoText: {
     fontSize: '20px',
@@ -269,10 +270,10 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
   },
   userAvatar: {
-    width: '28px',
-    height: '28px',
+    width: '30px',
+    height: '30px',
     borderRadius: '50%',
-    background: 'var(--gradient-brand)',
+    background: 'var(--gradient-neon)',
     color: 'white',
     fontSize: '13px',
     fontWeight: '700',
@@ -280,6 +281,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    boxShadow: 'var(--shadow-neon-cyan)',
   },
   userInfo: {
     display: 'flex',

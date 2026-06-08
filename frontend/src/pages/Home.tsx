@@ -10,14 +10,79 @@ import carlosSilvaImg from '../assets/carlos_silva.png';
 import { useToast } from '../context/ToastContext';
 import 'leaflet/dist/leaflet.css';
 
-// Fix Leaflet default icon paths broken by Vite bundling — Leaflet typings are incomplete here
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
+/* ── Ícones customizados por categoria ──────────────────── */
+const CATEGORY_ICON_CONFIG: Record<string, { svg: string; color: string; bg: string }> = {
+  eletricista: {
+    color: '#F59E0B',
+    bg: '#FFFBEB',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F59E0B" width="16" height="16"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,
+  },
+  jardineiro: {
+    color: '#10B981',
+    bg: '#ECFDF5',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#10B981" width="16" height="16"><path d="M12 2C8 2 5 5 5 9c0 2.5 1.2 4.7 3 6.1V17h8v-1.9c1.8-1.4 3-3.6 3-6.1 0-4-3-7-7-7zm0 2c2.8 0 5 2.2 5 5s-2.2 5-5 5-5-2.2-5-5 2.2-5 5-5z"/><rect x="10" y="17" width="4" height="5" rx="1"/></svg>`,
+  },
+  encanador: {
+    color: '#3B82F6',
+    bg: '#EFF6FF',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#3B82F6" width="16" height="16"><path d="M12 2C9.2 2 7 4.2 7 7c0 2.1 1.2 3.9 3 4.7V22h4V11.7c1.8-.8 3-2.6 3-4.7 0-2.8-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/></svg>`,
+  },
+  pintor: {
+    color: '#8B5CF6',
+    bg: '#F5F3FF',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#8B5CF6" width="16" height="16"><path d="M7 14c0 1.1-.9 2-2 2s-2-.9-2-2c0-.7.4-1.4 1-1.7V7h2v5.3c.6.3 1 1 1 1.7zM20 5h-9.2C10.4 3.8 9.3 3 8 3H4C2.9 3 2 3.9 2 5v2h4V6h8v6h2V8h4V5z"/></svg>`,
+  },
+  piscineiro: {
+    color: '#06B6D4',
+    bg: '#ECFEFF',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#06B6D4" width="16" height="16"><path d="M2 17.5c1.7 0 2.8-.6 3.8-1.2.9-.5 1.7-1 3.2-1s2.3.5 3.2 1c1 .6 2.1 1.2 3.8 1.2s2.8-.6 3.8-1.2c.9-.5 1.7-1 3.2-1v-2c-1.5 0-2.3.5-3.2 1-1 .6-2.1 1.2-3.8 1.2s-2.8-.6-3.8-1.2C11.3 13.5 10.2 13 8.5 13c-1.7 0-2.8.6-3.8 1.2-.9.5-1.7 1-3.2 1v2.3zM2 13c1.7 0 2.8-.6 3.8-1.2.9-.5 1.7-1 3.2-1s2.3.5 3.2 1c1 .6 2.1 1.2 3.8 1.2s2.8-.6 3.8-1.2C16.8 11.2 17.8 11 19 11V9c-1.7 0-2.8.6-3.8 1.2-.9.5-1.7 1-3.2 1s-2.3-.5-3.2-1C7.8 9.6 6.7 9 5 9c-1.7 0-2.8.6-3.8 1.2C.2 10.7 0 11 0 11v2z"/><circle cx="16" cy="5" r="2"/></svg>`,
+  },
+};
+
+const DEFAULT_ICON_CONFIG = { color: '#0046C0', bg: '#EFF6FF', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0046C0" width="16" height="16"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>` };
+
+function createCategoryIcon(category: string): L.DivIcon {
+  const cfg = CATEGORY_ICON_CONFIG[category] ?? DEFAULT_ICON_CONFIG;
+  return L.divIcon({
+    className: '',
+    iconSize: [40, 48],
+    iconAnchor: [20, 48],
+    popupAnchor: [0, -50],
+    html: `
+      <div style="
+        position: relative;
+        width: 40px;
+        height: 48px;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+      ">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 48" width="40" height="48">
+          <defs>
+            <linearGradient id="pinGrad-${category}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:${cfg.color};stop-opacity:1" />
+              <stop offset="100%" style="stop-color:${cfg.color};stop-opacity:0.75" />
+            </linearGradient>
+          </defs>
+          <!-- corpo do pin arredondado -->
+          <path d="M20 2C11.16 2 4 9.16 4 18c0 11 16 28 16 28s16-17 16-28C36 9.16 28.84 2 20 2z"
+                fill="url(#pinGrad-${category})" />
+          <!-- círculo branco interno -->
+          <circle cx="20" cy="18" r="11" fill="white" opacity="0.95"/>
+        </svg>
+        <!-- ícone da categoria centralizado -->
+        <div style="
+          position: absolute;
+          top: 10px;
+          left: 12px;
+          width: 16px;
+          height: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">${cfg.svg}</div>
+      </div>
+    `,
+  });
+}
 
 /* ── Categorias ─────────────────────────────────────── */
 const CATEGORIES = [
@@ -33,9 +98,9 @@ type SortMode = 'rating' | 'distance';
 type ViewMode = 'list' | 'map';
 
 function distanceColor(km: number): string {
-  if (km <= 3) return '#10B981';
-  if (km <= 10) return '#F59E0B';
-  return '#EF4444';
+  if (km <= 3) return '#00C48C'; // Neon-ish green
+  if (km <= 10) return '#FF9900'; // Vibrant orange
+  return '#FF2D55'; // Vibrant pink/red
 }
 
 /* ── Skeleton card ──────────────────────────────────── */
@@ -151,21 +216,21 @@ export const Home: React.FC = () => {
             Profissionais avaliados e recomendados pelos seus vizinhos de condomínio.
           </p>
 
-          <form onSubmit={handleSearch} style={styles.searchCard}>
+          <form onSubmit={handleSearch} style={styles.searchCard} className="glass">
             {/* Localização atual */}
             <div style={styles.locationRow}>
-              <MapPin size={16} color="var(--primary)" />
+              <MapPin size={18} color="var(--primary)" />
               <span style={styles.locationLabel}>{locationLabel}</span>
               <button
                 type="button"
                 onClick={handleGetLocation}
                 disabled={locating}
-                className="btn btn-sm btn-outline"
-                style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px' }}
+                className="btn btn-sm"
+                style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '5px', background: 'var(--brand-100)', color: 'var(--brand-700)', border: 'none' }}
               >
                 {locating
-                  ? <><div className="spinner spinner-sm" /><span>Obtendo...</span></>
-                  : <><Navigation size={13} /><span>Usar GPS</span></>
+                  ? <><div className="spinner spinner-sm" style={{borderColor: 'var(--brand-200)', borderTopColor: 'var(--brand-700)'}}/><span>Obtendo...</span></>
+                  : <><Navigation size={14} /><span>Usar GPS</span></>
                 }
               </button>
             </div>
@@ -173,7 +238,7 @@ export const Home: React.FC = () => {
             {/* Slider de raio */}
             <div style={styles.sliderRow}>
               <span style={styles.sliderLabel}>
-                Raio de busca: <strong style={{ color: 'var(--primary)' }}>{radius} km</strong>
+                Raio de busca: <strong style={{ color: 'var(--primary)', fontSize: '15px' }}>{radius} km</strong>
               </span>
               <input
                 type="range" min="1" max="50" value={radius}
@@ -183,7 +248,7 @@ export const Home: React.FC = () => {
             </div>
 
             <button type="submit" className="btn btn-primary" style={styles.searchBtn}>
-              <Search size={17} />
+              <Search size={18} />
               <span>Buscar Profissionais</span>
             </button>
           </form>
@@ -287,36 +352,48 @@ export const Home: React.FC = () => {
                 style={{ width: '100%', height: '100%', borderRadius: 'var(--radius-lg)' }}
               >
                 <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                  subdomains="abcd"
+                  maxZoom={20}
                 />
                 {/* Círculo da área de busca */}
                 <Circle
                   center={[lat, lng]}
                   radius={radius * 1000}
-                  pathOptions={{ color: 'var(--primary)', fillOpacity: 0.05, weight: 1.5 }}
+                  pathOptions={{ color: '#0046C0', fillColor: '#0046C0', fillOpacity: 0.06, weight: 2, dashArray: '6 4' }}
                 />
                 {sorted.map((p) => {
                   const catObj = CATEGORIES.find(c => c.value === p.category);
+                  const catCfg = CATEGORY_ICON_CONFIG[p.category] ?? DEFAULT_ICON_CONFIG;
                   return (
-                    <Marker key={p.id} position={[p.center_lat, p.center_lng]}>
+                    <Marker key={p.id} position={[p.center_lat, p.center_lng]} icon={createCategoryIcon(p.category)}>
                       <Popup>
-                        <div style={{ minWidth: '160px' }}>
-                          <strong style={{ fontSize: '14px' }}>{p.business_name}</strong>
-                          <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 6px' }}>
-                            {catObj?.emoji} {catObj?.label ?? p.category}
-                          </p>
-                          {p.avg_rating && (
-                            <p style={{ fontSize: '12px', margin: '0 0 6px' }}>⭐ {p.avg_rating.toFixed(1)} ({p.review_count})</p>
-                          )}
-                          <p style={{ fontSize: '11px', margin: '0 0 8px', color: distanceColor(p.distance_km ?? 0), fontWeight: 600 }}>
-                            📍 {(p.distance_km ?? 0).toFixed(1)} km
-                          </p>
+                        <div style={{ minWidth: '180px', fontFamily: 'Inter, system-ui, sans-serif' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: catCfg.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+                              dangerouslySetInnerHTML={{ __html: catCfg.svg }}
+                            />
+                            <div>
+                              <strong style={{ fontSize: '13px', color: '#0F172A', display: 'block', lineHeight: 1.2 }}>{p.business_name}</strong>
+                              <span style={{ fontSize: '11px', color: catCfg.color, fontWeight: 600 }}>{catObj?.label ?? p.category}</span>
+                            </div>
+                          </div>
+                          {p.avg_rating ? (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px' }}>
+                              <span style={{ color: '#F59E0B', fontSize: '13px' }}>★</span>
+                              <span style={{ fontSize: '13px', fontWeight: 700, color: '#0F172A' }}>{p.avg_rating.toFixed(1)}</span>
+                              <span style={{ fontSize: '11px', color: '#94A3B8' }}>({p.review_count} avaliações)</span>
+                            </div>
+                          ) : null}
+                          <div style={{ fontSize: '11px', color: distanceColor(p.distance_km ?? 0), fontWeight: 600, marginBottom: '10px' }}>
+                            📍 {(p.distance_km ?? 0).toFixed(1)} km de distância
+                          </div>
                           <button
                             onClick={() => navigate(`/providers/${p.id}`)}
-                            style={{ fontSize: '12px', padding: '4px 10px', backgroundColor: '#0046C0', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', width: '100%' }}
+                            style={{ fontSize: '12px', padding: '7px 12px', background: 'linear-gradient(135deg, #0046C0, #0066FF)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', width: '100%', fontWeight: 600, letterSpacing: '0.3px' }}
                           >
-                            Ver perfil
+                            Ver perfil →
                           </button>
                         </div>
                       </Popup>
@@ -336,7 +413,7 @@ export const Home: React.FC = () => {
                   <div
                     key={p.id}
                     style={styles.providerCard}
-                    className="provider-card"
+                    className="provider-card glass"
                     onClick={() => navigate(`/providers/${p.id}`)}
                   >
                     <div style={styles.cardHeader}>
@@ -356,12 +433,12 @@ export const Home: React.FC = () => {
 
                       <div style={styles.providerInfo}>
                         <div style={styles.badgesRow}>
-                          <span className="badge badge-success">
+                          <span className="badge badge-brand">
                             <Shield size={10} />
                             Verificado
                           </span>
                           {isCarlos && (
-                            <span className="badge badge-warning">
+                            <span className="badge" style={{ background: 'var(--neon-cyan)', color: '#004040' }}>
                               <Award size={10} />
                               Destaque
                             </span>
@@ -380,16 +457,16 @@ export const Home: React.FC = () => {
 
                     <div style={styles.cardFooter}>
                       <div style={styles.ratingBox}>
-                        <Star size={15} fill="var(--warning)" color="var(--warning)" />
+                        <Star size={16} fill="#FF9900" color="#FF9900" />
                         <span style={styles.ratingText}>
                           {p.avg_rating ? p.avg_rating.toFixed(1) : '—'}
                         </span>
                         {p.review_count > 0 && (
-                          <span style={styles.reviewCount}>({p.review_count})</span>
+                          <span style={styles.reviewCount}>({p.review_count} avaliações)</span>
                         )}
                       </div>
-                      <div style={{ ...styles.distanceBox, backgroundColor: dColor + '18', border: `1px solid ${dColor}40` }}>
-                        <MapPin size={12} color={dColor} />
+                      <div style={{ ...styles.distanceBox, backgroundColor: dColor + '15', border: `1px solid ${dColor}30` }}>
+                        <MapPin size={14} color={dColor} />
                         <span style={{ ...styles.distanceText, color: dColor }}>
                           {distKm.toFixed(1)} km
                         </span>
@@ -413,8 +490,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   /* Hero */
   hero: {
-    background: 'var(--gradient-brand)',
-    padding: '60px 0 80px',
+    background: 'var(--gradient-hero)',
+    padding: '80px 0 100px',
     position: 'relative',
     overflow: 'hidden',
   },
@@ -422,49 +499,50 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: '24px',
+    gap: '32px',
     position: 'relative',
     zIndex: 1,
   },
   heroTitle: {
-    fontSize: 'clamp(26px, 4vw, 38px)',
+    fontSize: 'clamp(32px, 5vw, 48px)',
     fontWeight: '800',
-    color: 'white',
+    color: 'var(--brand-900)',
     textAlign: 'center',
-    letterSpacing: '-0.8px',
-    lineHeight: '1.15',
-    maxWidth: '700px',
+    letterSpacing: '-1px',
+    lineHeight: '1.1',
+    maxWidth: '800px',
+    textShadow: '0 4px 20px rgba(43, 91, 255, 0.1)',
   },
   heroSub: {
-    fontSize: '15px',
-    color: 'rgba(255,255,255,0.75)',
+    fontSize: '18px',
+    color: 'var(--brand-700)',
     textAlign: 'center',
-    maxWidth: '520px',
+    maxWidth: '600px',
     lineHeight: '1.6',
+    fontWeight: '500',
   },
   searchCard: {
-    backgroundColor: 'white',
-    borderRadius: 'var(--radius-lg)',
-    padding: '24px',
     width: '100%',
-    maxWidth: '760px',
-    boxShadow: 'var(--shadow-xl)',
+    maxWidth: '800px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px',
+    gap: '20px',
+    padding: '32px',
+    borderRadius: 'var(--radius-xl)',
   },
   locationRow: {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
-    backgroundColor: 'var(--gray-50)',
-    border: '1.5px solid var(--border)',
-    borderRadius: 'var(--radius-sm)',
-    padding: '10px 14px',
+    gap: '12px',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    border: '1px solid rgba(255, 255, 255, 0.8)',
+    borderRadius: 'var(--radius-md)',
+    padding: '12px 16px',
+    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.5)',
   },
   locationLabel: {
-    fontSize: '14px',
-    fontWeight: '500',
+    fontSize: '15px',
+    fontWeight: '600',
     color: 'var(--text-primary)',
     flex: 1,
   },
@@ -545,19 +623,14 @@ const styles: Record<string, React.CSSProperties> = {
   },
   /* Provider Card */
   providerCard: {
-    backgroundColor: 'white',
-    borderRadius: 'var(--radius-lg)',
-    border: '1px solid var(--border)',
-    padding: '22px',
-    boxShadow: 'var(--shadow-sm)',
     display: 'flex',
     flexDirection: 'column',
-    gap: '14px',
-    transition: 'var(--ease)',
+    gap: '16px',
+    padding: '24px',
   },
   cardHeader: {
     display: 'flex',
-    gap: '14px',
+    gap: '16px',
     alignItems: 'flex-start',
   },
   avatarWrapper: {
@@ -565,11 +638,12 @@ const styles: Record<string, React.CSSProperties> = {
     flexShrink: 0,
   },
   avatar: {
-    width: '60px',
-    height: '60px',
-    borderRadius: 'var(--radius-md)',
+    width: '64px',
+    height: '64px',
+    borderRadius: 'var(--radius-lg)',
     objectFit: 'cover',
-    border: '2px solid var(--border)',
+    border: '3px solid white',
+    boxShadow: 'var(--shadow-sm)',
   },
   categoryEmoji: {
     position: 'absolute',
@@ -595,20 +669,20 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '2px',
   },
   businessName: {
-    fontSize: '16px',
+    fontSize: '18px',
     fontWeight: '700',
     color: 'var(--text-primary)',
     lineHeight: '1.2',
   },
   categoryName: {
-    fontSize: '12px',
-    color: 'var(--text-secondary)',
-    fontWeight: '500',
+    fontSize: '13px',
+    color: 'var(--brand-600)',
+    fontWeight: '600',
   },
   cardDesc: {
-    fontSize: '13px',
+    fontSize: '14px',
     color: 'var(--text-secondary)',
-    lineHeight: '1.5',
+    lineHeight: '1.6',
     flex: 1,
   },
   cardFooter: {

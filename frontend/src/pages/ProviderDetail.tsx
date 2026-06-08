@@ -160,7 +160,7 @@ export const ProviderDetail: React.FC = () => {
                 <span>Documentação Verificada</span>
               </span>
               {isEletricista && (
-                <span className="badge badge-info" style={styles.featuredBadge}>
+                <span className="badge" style={styles.featuredBadge}>
                   <Award size={13} />
                   <span>Profissional Destaque</span>
                 </span>
@@ -382,9 +382,9 @@ export const ProviderDetail: React.FC = () => {
                   </a>
                 )}
                 {provider.email && (
-                  <a href={`mailto:${provider.email}`} style={styles.contactItem}>
+                  <a href={`mailto:${provider.email}`} style={styles.contactItem} className="provider-contact-link">
                     <div style={styles.contactIconBgGray}>
-                      <Mail size={18} color="#475569" />
+                      <Mail size={18} color="var(--brand-600)" />
                     </div>
                     <div style={styles.contactTextContainer}>
                       <span style={styles.contactLabel}>E-MAIL</span>
@@ -399,9 +399,9 @@ export const ProviderDetail: React.FC = () => {
                 )}
               </div>
               <div style={styles.lgpdInfoBox}>
-                <Info size={20} color="#0046C0" style={{ flexShrink: 0 }} />
+                <Info size={20} color="var(--primary)" style={{ flexShrink: 0 }} />
                 <span style={styles.lgpdInfoText}>
-                  Mencione que você encontrou o contato através do <strong>CondoServ</strong>.
+                  Mencione que você encontrou o contato através do <strong>VizinhoPro</strong>.
                 </span>
               </div>
             </div>
@@ -493,11 +493,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   coverageWarningText: { fontSize: '13.5px', color: '#92400E', lineHeight: '1.4', fontWeight: '500' },
   profileHeader: {
-    backgroundColor: 'white', borderRadius: '16px', border: '1px solid var(--border)',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(12px)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.5)',
     padding: '32px', display: 'flex', gap: '32px', alignItems: 'center',
-    flexWrap: 'wrap', marginBottom: '28px',
+    flexWrap: 'wrap', marginBottom: '28px', boxShadow: 'var(--shadow-sm)'
   },
-  profileAvatar: { width: '120px', height: '120px', borderRadius: '16px', objectFit: 'cover', border: '1px solid var(--border)' },
+  profileAvatar: { width: '120px', height: '120px', borderRadius: '16px', objectFit: 'cover', border: '3px solid white', boxShadow: 'var(--shadow-sm)' },
   profileMeta: { flex: '1', minWidth: '280px' },
   badgeRow: { display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' },
   verifyBadge: {
@@ -529,7 +529,7 @@ const styles: Record<string, React.CSSProperties> = {
   bodyGrid: { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '28px', alignItems: 'start' },
   leftCol: { display: 'flex', flexDirection: 'column', gap: '28px' },
   rightCol: { display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: '88px' },
-  contentBlock: { backgroundColor: 'white', borderRadius: '16px', border: '1px solid var(--border)', padding: '28px' },
+  contentBlock: { backgroundColor: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(12px)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.5)', padding: '28px', boxShadow: 'var(--shadow-sm)' },
   blockTitleRow: {
     display: 'flex', alignItems: 'center', gap: '10px',
     marginBottom: '18px', paddingBottom: '10px', borderBottom: '1px solid var(--border)',
@@ -599,13 +599,13 @@ const styles: Record<string, React.CSSProperties> = {
   contactLabel: { fontSize: '10px', fontWeight: '600', color: 'var(--text-muted)', letterSpacing: '0.5px' },
   contactValue: { fontSize: '14px', fontWeight: '600', color: 'var(--text-primary)' },
   lgpdInfoBox: {
-    display: 'flex', gap: '12px', backgroundColor: '#EFF6FF',
-    padding: '12px', borderRadius: '8px', border: '1px solid #DBEAFE', alignItems: 'center',
+    display: 'flex', gap: '12px', backgroundColor: 'var(--brand-50)',
+    padding: '12px', borderRadius: '8px', border: '1px solid var(--brand-200)', alignItems: 'center',
   },
-  lgpdInfoText: { fontSize: '12px', color: '#0046C0', lineHeight: '1.4' },
+  lgpdInfoText: { fontSize: '12px', color: 'var(--brand-700)', lineHeight: '1.4' },
   hireBlock: {
-    backgroundColor: 'white', borderRadius: '16px',
-    border: '1px solid var(--border)', padding: '22px',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(12px)', borderRadius: '16px',
+    border: '1px solid rgba(255, 255, 255, 0.5)', padding: '22px', boxShadow: 'var(--shadow-sm)',
   },
   hireBlockTitle: { fontSize: '15px', fontWeight: '700', color: 'var(--text-primary)' },
   hireBlockDesc: { fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '14px' },

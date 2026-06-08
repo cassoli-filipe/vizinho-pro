@@ -55,8 +55,8 @@ export const MinhasContratacoes: React.FC = () => {
         <div style={styles.pageHeader}>
           <div>
             <h1 style={styles.pageTitle}>Minhas Contratações</h1>
-            <p style={styles.pageDesc}>
-              Histórico de profissionais que você contratou pelo CondoServ.
+            <p style={{ fontSize: '15px', color: 'var(--text-secondary)' }}>
+              Histórico de profissionais que você contratou pelo VizinhoPro.
             </p>
           </div>
           <Link to="/search" className="btn btn-outline" style={styles.searchBtn}>
