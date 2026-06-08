@@ -100,7 +100,7 @@ export const ProviderDetail: React.FC = () => {
         {/* Header do Prestador */}
         <div style={styles.profileHeader}>
           <img 
-            src={provider.image_url} 
+            src={provider.image_url ?? undefined}
             alt={provider.full_name} 
             style={styles.profileAvatar} 
           />

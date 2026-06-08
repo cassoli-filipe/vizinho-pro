@@ -57,13 +57,20 @@ export interface Review {
 
 export interface ProviderDetail extends Provider {
   full_name: string;
-  recent_reviews: Review[];
+  recent_reviews: ReviewDetail[];
   // contact fields (may be null for providers registered before the migration)
   phone?: string | null;
   email?: string | null;
   contact_whatsapp?: string | null;
   experience_years?: number | null;
   services?: string[] | null;
+  image_url?: string | null;
+  is_within_service_area?: boolean | null;
+}
+
+export interface ReviewDetail extends Review {
+  provider_response?: string | null;
+  responded_at?: string | null;
 }
 
 export interface ProviderSearchItem {
