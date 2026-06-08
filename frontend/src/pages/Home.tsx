@@ -77,10 +77,14 @@ export const Home: React.FC = () => {
 
   const fetchProviders = useCallback(async (customLat?: number, customLng?: number, signal?: AbortSignal) => {
     setLoading(true);
+    const searchLat = customLat ?? lat;
+    const searchLng = customLng ?? lng;
+    localStorage.setItem('condoserv:search_lat', String(searchLat));
+    localStorage.setItem('condoserv:search_lng', String(searchLng));
     try {
       const data = await apiService.searchProviders({
-        lat: customLat ?? lat,
-        lng: customLng ?? lng,
+        lat: searchLat,
+        lng: searchLng,
         radius_km: radius,
         category: category || undefined,
       }, signal);

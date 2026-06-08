@@ -55,10 +55,14 @@ export interface Review {
   created_at: string;
 }
 
+export interface ReviewDetail extends Review {
+  provider_response?: string | null;
+  responded_at?: string | null;
+}
+
 export interface ProviderDetail extends Provider {
   full_name: string;
   recent_reviews: ReviewDetail[];
-  // contact fields (may be null for providers registered before the migration)
   phone?: string | null;
   email?: string | null;
   contact_whatsapp?: string | null;
@@ -66,11 +70,6 @@ export interface ProviderDetail extends Provider {
   services?: string[] | null;
   image_url?: string | null;
   is_within_service_area?: boolean | null;
-}
-
-export interface ReviewDetail extends Review {
-  provider_response?: string | null;
-  responded_at?: string | null;
 }
 
 export interface ProviderSearchItem {
@@ -90,6 +89,32 @@ export interface ProviderSearchItem {
 
 export interface PaginatedProviders {
   items: ProviderSearchItem[];
+  total: number;
+  page: number;
+  page_size: number;
+}
+
+export interface ProviderMetrics {
+  profile_views: number;
+  whatsapp_clicks: number;
+  out_of_area_clicks: number;
+  conversion_rate: number;
+}
+
+export interface HireItem {
+  id: string;
+  provider_id: string;
+  provider_business_name: string;
+  provider_category: string;
+  hired_at: string;
+  estimated_value: number | null;
+  source_type: string;
+  has_review: boolean;
+  created_at: string;
+}
+
+export interface PaginatedHires {
+  items: HireItem[];
   total: number;
   page: number;
   page_size: number;

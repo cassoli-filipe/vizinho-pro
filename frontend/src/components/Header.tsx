@@ -32,6 +32,9 @@ export const Header: React.FC = () => {
   const navLinks = isAuthenticated
     ? [
         { href: '/search', label: 'Buscar Profissionais' },
+        ...(profile?.user_type === 'morador'
+          ? [{ href: '/minhas-contratacoes', label: 'Minhas Contratações' }]
+          : []),
         ...(profile?.user_type === 'prestador'
           ? [{ href: '/dashboard', label: 'Meu Painel' }]
           : []),
