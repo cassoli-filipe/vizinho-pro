@@ -1,0 +1,620 @@
+﻿1. Caracterização do Projeto (Contexto de Negócio):
+1.1 Identificação do Projeto:
+* Nome do projeto: Plataforma de Indicação e Avaliação de Prestadores de Serviço em Comunidades Condominiais (VizinhoPro)
+* Grupo / Integrantes (nome e NUSP): GRUPO: G03 / Integrantes: Filipe Cassoli (5806752), Daniel Travassos (16818547) , Bruno Reali de Freitas (16984172) , Felipe Sanches (16906625), Eduardo Berriel (15648397).  
+* Data da entrega: 13/04/2026 
+1.2 Organização Cliente: 
+
+
+O cliente do projeto são administrações condominiais responsáveis pela gestão de comunidades residenciais, abrangendo manutenção de infraestrutura predial, segurança de perímetro e suporte operacional aos moradores. Lida diariamente com o fluxo de profissionais terceirizados que circulam pelas áreas comuns e privativas para realização de manutenções, reformas e serviços domésticos. Atualmente, o controle dos prestadores de serviços é feito manualmente a partir do registro de seguranças e demais funcionários. 
+1.3 Problema identificado:
+Atualmente, o controle de prestadores de serviço nas comunidades condominiais é realizado de forma manual e descentralizada, o que gera uma série de ineficiências. Não há um sistema estruturado para registrar o histórico de atuação dos profissionais, dificultando a avaliação da qualidade dos serviços prestados ao longo do tempo. Além disso, existe uma forte assimetria de informação, pois os moradores não têm acesso a avaliações confiáveis ou consolidadas sobre os prestadores, baseando suas escolhas em indicações informais ou experiências isoladas.
+Outro problema relevante é a ausência de padronização nos registros feitos pelos funcionários e seguranças, o que pode levar à perda de informações, inconsistências e dificuldade de consulta futura. Também há limitações no controle de acesso e rastreabilidade dos profissionais que entram no condomínio, impactando diretamente a segurança.
+ 1.4 Objetivo do Software:
+Resolver a assimetria de informação na contratação de prestadores de serviço autônomos (eletricistas, encanadores, diaristas etc.) dentro de comunidades condominiais. A aplicação centraliza avaliações, notas e relatos dos moradores em um catálogo colaborativo, gerando um ranking interno de profissionais por categoria de serviço, integrado a um modelo de IA (Claude / Anthropic) para auxiliar na análise e síntese das avaliações.
+1.5 Público-alvo / Usuários: 
+- Moradores do condomínio (leitura e escrita de avaliações, busca de prestadores)
+- Administração do condomínio (aprovação de usuários, gestão de vínculos apartamento/bloco)
+2. Escopo do sistema (delimitação):
+2.1 Escopo incluído:
+* registro e avaliação de prestadores de serviço
+* busca de serviços (contém filtros para facilitar a busca)
+* consulta das notas dos trabalhadores e de seus meios de contato
+* consulta de todas as avaliações dos prestadores (atualmente é possível ver apenas as mais recentes publicadas no site, entretanto, visamos implementar o acesso completo de todas as avaliações de cada prestador)
+* apenas para administradores: painel administrativo onde pode-se fazer o cadastro de novos usuários (acesso restrito aos condôminos) e a remoção dos moradores do site
+2.2 Fora do escopo:
+* intermediação de pagamentos
+* agendamento de serviços
+* chat com outros moradores perguntando sobre serviços
+* acesso de trabalhadores ao site (para responder suas avaliações ou conversarem rapidamente pelo chat - sem contato direto por email ou celular)
+* administradores não conseguem apagar avaliações feitas e nem perfis dos trabalhadores criados
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3.1 Matriz de Requisitos:  
+3.2 Requisitos Funcionais:
+REQ01 — Autenticar Usuário
+O sistema deve permitir o login de moradores e administradores utilizando e-mail e senha. Não há cadastro público; o acesso só é possível após aprovação pela administração. Um usuário que não tenha sido previamente aprovado não consegue acessar nenhuma tela do sistema. Caso o login seja realizado com credenciais inválidas, o sistema deve exibir uma mensagem de erro genérica, sem revelar qual campo está incorreto, de modo a preservar a segurança da autenticação. Além disso, a sessão do usuário expira automaticamente após 30 minutos de inatividade, exigindo novo login para continuar utilizando a plataforma.
+ 
+REQ02 — Aprovar e Vincular Morador
+O sistema deve permitir que a administração cadastre, aprove e vincule um morador a um apartamento e bloco específicos. Moradores não podem se auto-cadastrar. Somente o perfil “Administração” tem permissão para visualizar e executar a tela de aprovação. Um morador vinculado a um determinado apartamento não pode ser vinculado a outro simultaneamente, garantindo a integridade do cadastro. Caso um morador seja desativado pela administração, seu acesso ao sistema é revogado imediatamente.
+ 
+REQ03 — Cadastrar Prestador de Serviço
+O sistema deve permitir que um morador autenticado cadastre o perfil de um prestador de serviço, informando nome, contato, categoria de serviço (por exemplo: Hidráulica, Elétrica, Jardinagem, Limpeza) e observações gerais. É obrigatório o preenchimento de pelo menos um campo de contato, seja telefone ou e-mail. A categoria de serviço deve ser selecionada a partir de uma lista pré-definida pelo sistema. Além disso, o sistema registra automaticamente qual morador realizou o cadastro e em qual data, assegurando a rastreabilidade da indicação.
+ 
+REQ04 — Registrar Avaliação de Prestador
+O sistema deve permitir que um morador autenticado registre uma avaliação para um prestador já cadastrado, atribuindo uma nota de 1 a 5 estrelas e um relato textual sobre o atendimento recebido. Um mesmo morador pode avaliar o mesmo prestador mais de uma vez, desde que as avaliações se refiram a contratações distintas; no entanto, não é permitido registrar duas avaliações para o mesmo prestador no mesmo dia. Tanto a nota quanto o relato são campos obrigatórios. O sistema registra o vínculo do avaliador (apartamento e bloco) para garantir a rastreabilidade de cada avaliação.
+ 
+REQ05 — Buscar e Filtrar Prestadores
+O sistema deve permitir que moradores autenticados busquem prestadores por nome e/ou por categoria de serviço, exibindo os resultados ordenados por nota média de forma decrescente. Ao realizar uma busca por categoria, o sistema retorna apenas os prestadores pertencentes àquela categoria. Prestadores que ainda não possuem nenhuma avaliação registrada aparecem ao final da listagem. A busca por nome é case-insensitive, ou seja, não diferencia letras maiúsculas de minúsculas, e aceita correspondência parcial, facilitando a localização de profissionais mesmo quando o morador não se recorda do nome completo.
+ 
+REQ06 — Gerar Ranking de Prestadores
+O sistema deve calcular e exibir um ranking interno dos prestadores mais bem avaliados por categoria, com base na média ponderada das notas recebidas. Esse ranking é atualizado imediatamente após o registro de uma nova avaliação, de modo a refletir sempre a percepção mais recente da comunidade. O ranking exibe a nota média, o número total de avaliações e a categoria de cada prestador. Prestadores que possuem menos de duas avaliações são marcados visualmente como “avaliações insuficientes”, sinalizando ao morador que a amostra ainda é pequena para uma conclusão confiável.
+
+
+
+
+4. Prototipação da Solução
+
+4.1 Objetivos do protótipo
+
+
+O que se pretende avaliar:
+
+
+* Validar o fluxo restrito de autenticação e as permissões de acesso (diferenciação entre Administração e Morador).
+* Testar a usabilidade e a clareza na hora de cadastrar, buscar e registrar avaliações de prestadores de serviço.
+* Verificar se a disposição das informações no ranking e nas listagens ajuda o morador a tomar decisões de contratação de forma rápida e segura.
+
+Aspectos da solução explorados:
+
+
+   * Fluxo de uso do sistema: desde o login, passando pela busca de categorias, até o momento do registro de uma nova avaliação.
+   * Estrutura das telas: organização de formulários (como indicação de profissionais) e exibição detalhada de relatos.
+   * Interação do usuário: respostas visuais durante o ranqueamento e filtros de prestadores.
+
+4.2 Protótipo de baixa fidelidade
+
+        Na etapa inicial, foram elaborados wireframes e esboços estruturais das telas com o foco na jornada do morador e da administração. O objetivo principal foi mapear a disposição dos elementos (campos de formulário, botões de ação e listas) e o fluxo geral, priorizando a lógica funcional em detrimento de acabamentos visuais, como cores e tipografia.
+
+  
+
+
+
+
+
+
+
+4.3 Protótipo de alta fidelidade ou funcional
+
+O protótipo de alta fidelidade traduz os rascunhos em interfaces navegáveis (HTML/CSS), estruturadas para simular o comportamento do sistema final. A aplicação baseou-se nos seguintes modelos de tela:
+
+
+Tela de Login (login.html):
+Função: Ponto de entrada com controle de acesso. Autentica moradores e administradores já aprovados.
+  
+
+
+
+Tela Inicial / Painel da Administração (cadastro_de_morador.html):
+Função: Área de gestão exclusiva do condomínio para aprovar, vincular (apartamento/bloco) e gerenciar os moradores.
+
+
+  
+
+
+
+Tela Principal / Dashboard (index.html):
+Função: Ponto central do morador após o login. Apresenta o menu principal e atalhos rápidos para as funcionalidades do sistema.
+  
+
+
+
+Tela de Busca, Ranking e Avaliação (busca_e_avaliacao.html):
+Função: Coração da plataforma. Permite buscar prestadores, filtrar por categoria (ex: elétrica, hidráulica), consultar o ranking de notas médias e ler os relatos.
+
+  
+
+
+
+
+
+
+
+
+Tela de Indicação de Profissional (indicar_profissional.html):
+Função: Formulário intuitivo para associar novos prestadores, garantindo seu cadastro apenas com contatos válidos e serviço especificado.
+  
+
+
+
+Aspectos Chave da UX (Experiência do Usuário):
+
+
+      * Simplicidade e intuição: Os fluxos possuem o mínimo de atritos possíveis. A categorização visual de serviços e exibição baseada em "notas / estrelas" reduz a curva de aprendizado.
+      * Portabilidade: A interface é desenvolvida com lógica responsiva (Mobile First), visando adaptar perfeitamente listas de tabelas e botões à tela de celulares, já que os moradores farão avaliações predominantemente via Mobile.
+
+Exemplo de Fluxo de Interação do Usuário:
+
+
+         * O morador acessa o sistema pelo smartphone.
+         * Realiza o login.
+         * Acessa a opção de buscar um profissional.
+         * Filtra serviços de "Jardinagem" e consulta o prestador número 1 do ranking.
+         * Contrata o serviço e, após a execução, retorna ao sistema para atribuir sua nota (1 a 5 estrelas) e deixar seu relato textual.
+         * Encerra a sessão. 
+
+  
+
+
+
+4.4 Aprendizados obtidos com o protótipo
+
+A fase de prototipação revelou-se uma etapa de aprendizado contínuo, expondo inconsistências e oportunidades de melhoria que dificilmente seriam identificadas apenas na fase de levantamento de requisitos. A seguir, detalham-se os principais aprendizados, refinamentos e decisões de design que emergiram desse processo iterativo.
+Separação de visões e controle de acesso:
+Um dos aprendizados mais críticos diz respeito à necessidade de segregar completamente as visões de "Administração" e "Morador". Durante os primeiros testes de navegação com o protótipo, ficou evidente que misturar responsabilidades nas mesmas telas gerava confusão e abria brechas para inconsistências operacionais graves, como a possibilidade de um morador visualizar ou até interferir no processo de aprovação de outros condôminos. A solução foi isolar integralmente o fluxo de cadastro e gestão de moradores em uma área exclusiva da administração do condomínio, acessível apenas por credenciais privilegiadas. Essa separação, além de aumentar a segurança, simplificou a experiência do morador comum, que passou a ver somente as funcionalidades pertinentes à sua jornada.
+Refinamento dos requisitos de busca:
+O protótipo também foi fundamental para transformar uma ideia vaga de "pesquisa por prestadores" em um requisito funcional preciso e bem delimitado. Nos testes iniciais, os usuários demonstraram frustração ao não encontrar prestadores ao digitar o nome com letras maiúsculas, minúsculas ou com pequenas variações. Isso levou à definição do requisito REQ05, que estabelece que a busca deve ser case-insensitive, ou seja, indiferente ao uso de maiúsculas e minúsculas, e que prestadores sem nenhuma avaliação registrada devem ser exibidos sempre ao final da lista de resultados. Essa ordenação garante que os profissionais mais bem avaliados pela comunidade ganhem destaque natural, orientando a tomada de decisão do morador de forma mais assertiva e confiável.
+Simplificação do fluxo de avaliação:
+Outro ponto de melhoria identificado foi a complexidade desnecessária no caminho percorrido pelo usuário para registrar uma avaliação. No protótipo inicial, avaliar um prestador exigia navegar por múltiplas telas: sair da busca, acessar um perfil separado, localizar o botão de avaliação e, só então, preencher o formulário. Nos testes, esse percurso longo gerou abandono e desinteresse por parte dos usuários simulados. A solução adotada foi concentrar a visualização do perfil do prestador e o botão de "Avaliar" na mesma interface, eliminando etapas intermediárias e tornando o processo de registro de nota e relato muito mais ágil e intuitivo, especialmente considerando que a maioria dos acessos ocorre via dispositivos móveis, onde cada clique a mais representa uma fricção significativa.
+Validação da lógica de indicação de profissionais:
+Durante a prototipação, também foi identificada a necessidade de impor validações mais rígidas no formulário de indicação de novos prestadores. Nos primeiros testes, usuários tentaram cadastrar profissionais com informações incompletas ou com números de telefone em formatos inválidos, o que contaminaria a base de dados com registros inutilizáveis. A partir desse aprendizado, definiu-se que o formulário de indicação deveria exigir obrigatoriamente: nome completo do prestador, categoria do serviço prestado e ao menos um contato válido (telefone ou e-mail). Essa decisão protege a integridade da plataforma e garante que os moradores encontrem informações de contato funcionais ao selecionar um profissional.
+A importância do design Mobile First:
+Por fim, a prototipação reforçou a premissa de que a plataforma deve ser projetada prioritariamente para dispositivos móveis. Ao simular o uso em telas menores, percebeu-se que tabelas com muitas colunas e botões muito próximos uns dos outros prejudicavam severamente a usabilidade. Isso motivou uma revisão completa dos componentes visuais, com ênfase em listas verticais, botões de toque amplo e tipografia legível em telas pequenas, garantindo que o morador consiga realizar todo o seu fluxo de uso, do login ao registro de avaliação, de forma fluida e sem dificuldades técnicas, mesmo em um smartphone de entrada.
+5. Conclusões
+5.1 Visão Geral da Solução Proposta
+        O aplicativo VizinhoPro visa à resolução do problema da dificuldade enfrentada por moradores de condomínios de encontrar prestadores de serviços confiáveis e previamente avaliados. A ideia do aplicativo é que, dentro de uma comunidade de usuários pré-estabelecida, um condomínio por exemplo, haja uma centralização de indicações, avaliações e rankings de prestadores de serviço em uma única plataforma segura e controlada. A solução garante que apenas usuários previamente aprovados tenham acesso, o que será garantido por um perfil administrador com acesso específico e diferente do regular, que terá o poder de aprovar ou recusar o cadastro de moradores promovendo um ambiente confiável e rastreável, onde cada interação é vinculada a um morador e a um contexto específico do condomínio. Dessa forma, elimina-se a dependência de recomendações informais e pouco estruturadas, substituindo-as por um sistema organizado que apoia a contratação de prestadores de serviço com base em avaliações reais e rastreáveis, ao mesmo tempo proporcionando ao prestador um meio de consistente obtenção de contratos e serviços. O prestador só poderá ser cadastrado por um condômino já aprovado pela administração
+
+
+5.2 Principais Funcionalidades do Sistema 
+O sistema oferece um conjunto integrado de funcionalidades que estruturam toda a jornada do usuário, desde o acesso até a avaliação de serviços. Inicialmente, há um mecanismo de autenticação restrita que diferencia perfis de administração e moradores, garantindo controle de acesso e segurança. A administração possui a capacidade de aprovar e vincular moradores a unidades específicas, mantendo a integridade do cadastro. Essa aba já é completamente separada já desde o acesso, de maneira a garantir uma maior simplicidade para os condôminos e evitar interferências desses na administração geral do sistema. Já os moradores podem cadastrar prestadores de serviço com informações padronizadas e rastreáveis, sendo uma forma de contato obrigatória, registrar avaliações completas com uma nota variando de 1 a 5 estrelas e um espaço para relatos e observações, e consultar prestadores por meio de buscas inteligentes, por nome específico ou não, que contam com um filtro por categoria e ordenação por ranking baseado em avaliações passadas. Esses rankings são gerados automaticamente pelo sistema com base na média ponderada de avaliações passadas, destacando os profissionais mais bem avaliados e sinalizando aqueles com poucas avaliações, o que contribui para decisões mais informadas e confiáveis
+
+
+5.3 Próximos Passos do Projeto
+Como evolução natural do projeto, há alguns próximos passos a serem realizados. Primeiro, a implementação completa do backend e da persistência de dados, integrando o protótipo funcional a um sistema real com banco de dados e controle de sessões robusto. Isso será essencial para identificar possíveis problemas que possam surgir com um banco de dados de tamanho real. Também será fundamental realizar testes com usuários reais do condomínio para validar usabilidade, desempenho e aderência às necessidades práticas, além de coletar feedbacks para refinamento contínuo, dessa maneira identificando problemas com o UX. Outras melhorias incluem a implementação de notificações, mecanismos de denúncia ou moderação de avaliações, possíveis integrações com serviços externos, opção de contato entre moradores, entre outras melhorias que podem surgir com novos problemas. Por fim, será importante investir em aspectos de segurança, escalabilidade e otimização da experiência mobile, consolidando a plataforma como uma solução confiável e eficiente no contexto condominial.
+6. Arquitetura e implementação do Backend (pós-pivotamento) 
+6.1 Estrutura de Pastas e Separação de Responsabilidades
+O projeto é organizado em dois serviços principais rodando em containers Docker separados:
+vizinho_pro/
+├── backend/           # FastAPI + SQLAlchemy + Alembic
+│   └── app/
+│       ├── api/v1/endpoints/   # Rotas HTTP (auth, providers, reviews, residents, health)
+│       ├── core/               # Configuração, banco de dados, segurança, dependências
+│       ├── domain/             # Modelos ORM, enums, exceções, geo helpers
+│       ├── repositories/       # Camada de acesso a dados
+│       ├── schemas/            # Pydantic schemas (request/response)
+│       └── services/           # Lógica de negócio
+├── frontend/          # React + TypeScript (Vite) → Nginx
+└── docker-compose.yml # Orquestração dos 3 serviços
+
+
+O backend e o frontend rodam em processos separados para permitir escalabilidade independente, deploy separado e clara separação de responsabilidades. O backend expõe uma API REST, e o frontend a consome via HTTP.
+6.2 Contrato da API (Endpoints e Lógica)
+
+
+
+
+Método
+	Endpoint
+	Descrição
+	Auth
+	GET
+	/api/v1/health
+	Verificação de saúde do serviço
+	Não
+	POST
+	/api/v1/auth/register
+	Completa o cadastro do usuário autenticado via Supabase
+	Sim
+	GET
+	/api/v1/auth/me
+	Retorna o perfil do usuário autenticado
+	Sim
+	PATCH
+	/api/v1/auth/me
+	Atualiza o perfil do usuário autenticado
+	Sim
+	DELETE
+	/api/v1/auth/me
+	Realiza soft-delete do perfil (exclusão lógica)
+	Sim
+	GET
+	/api/v1/providers
+	Busca prestadores por lat/lng/raio/categoria (paginado)
+	Não
+	GET
+	/api/v1/providers/me
+	Retorna o perfil do prestador autenticado
+	Sim
+	GET
+	/api/v1/providers/me/metrics
+	Retorna métricas de engajamento do prestador
+	Sim
+	PATCH
+	/api/v1/providers/me
+	Atualiza o perfil do prestador autenticado
+	Sim
+	GET
+	/api/v1/providers/{id}
+	Retorna detalhes de um prestador específico
+	Sim
+	POST
+	/api/v1/providers/{id}/events
+	Registra evento de engajamento (CONTACT_CLICK, etc.)
+	Sim
+	POST
+	/api/v1/reviews
+	Registra uma avaliação de prestador
+	Sim
+	PATCH
+	/api/v1/reviews/{id}/response
+	Prestador responde a uma avaliação
+	Sim
+	POST
+	/api/v1/residents/hires
+	Registra uma contratação de prestador
+	Sim
+	GET
+	/api/v1/residents/hires
+	Lista contratações do morador autenticado
+	Sim
+	6.3 Documentação e Integração com Frontend
+A documentação automática do FastAPI (/docs via Swagger UI, disponível apenas em ambiente de desenvolvimento) serviu como contrato vivo entre backend e frontend durante o desenvolvimento. O frontend React consome a API via variável de ambiente VITE_API_URL, configurada em tempo de build no Dockerfile do frontend, garantindo portabilidade entre ambientes.
+7. Infraestrutura e conteinerização (Docker)
+7.1 Receitas de Construção (Dockerfiles)
+Backend (backend/Dockerfile):
+            * Imagem base: python:3.12-slim
+            * Gerenciador de dependências: uv (instalado via pip)
+            * Instalação de dependências: uv sync --frozen --no-dev (respeita o uv.lock)
+            * Porta exposta: 8000
+            * Comando de inicialização: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
+Frontend (frontend/Dockerfile):
+            * Estágio de build: node:22-alpine → npm ci + npm run build
+            * Estágio de produção: nginx:alpine com configuração de SPA fallback (try_files $uri /index.html)
+            * Porta exposta: 80
+            * A variável VITE_API_URL é passada como ARG do Docker para o build do Vite, permitindo configurar a URL da API em tempo de build.
+6.2 Orquestração de Serviços (Docker Compose)
+O arquivo docker-compose.yml orquestra três serviços:
+
+
+Serviço
+	Imagem
+	Porta
+	Dependências
+	db
+	postgis/postgis:16-3.4
+	5432
+	—
+	backend
+	Build local (./backend)
+	8000
+	db (healthcheck)
+	frontend
+	Build local (./frontend)
+	3000→80
+	backend
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rede Docker Interna: Os serviços se comunicam pelo nome do serviço como hostname. O backend conecta ao banco via postgresql+asyncpg://postgres:postgres@db:5432/condoserv, onde db é resolvido pela rede interna do Docker Compose.
+Inicialização automática: O comando de inicialização do backend executa uv run alembic upgrade head antes de subir o servidor, garantindo que o schema do banco esteja sempre atualizado sem intervenção manual.
+6.3 Padronização e Variáveis de Ambiente
+O backend utiliza pydantic-settings para carregar configurações via arquivo .env:
+
+
+Variável
+	Descrição
+	DATABASE_URL
+	URL de conexão com o PostgreSQL (asyncpg)
+	SUPABASE_URL
+	URL do projeto Supabase
+	SUPABASE_ANON_KEY
+	Chave anônima do Supabase
+	SUPABASE_JWT_SECRET
+	Secret para validação de JWT (HS256)
+	CPF_HASH_SALT
+	Salt para o hash SHA-256 do CPF
+	ALLOW_UNSIGNED_JWT
+	false em produção; true apenas em dev local
+	ENVIRONMENT
+	development / production
+	
+
+
+
+
+
+
+
+
+
+Essa abordagem garante que credenciais nunca sejam commitadas no repositório e permite fácil transição entre ambientes.
+8. Camada de persistência (Banco de Dados)
+8.1 Modelo Relacional e Esquema de Tabelas
+O banco de dados condoserv no PostgreSQL (com extensão PostGIS) contém as seguintes tabelas principais:
+Tabela: profiles (Usuário)
+Coluna
+	Tipo
+	Restrições
+	id
+	UUID (PK)
+	NOT NULL — sincronizado com auth.uid() do Supabase
+	user_type
+	ENUM (morador, prestador)
+	NOT NULL
+	full_name
+	VARCHAR(255)
+	NOT NULL
+	cpf_hash
+	VARCHAR(64)
+	NOT NULL, UNIQUE
+	email
+	VARCHAR(255)
+	NOT NULL, UNIQUE
+	phone
+	VARCHAR(20)
+	NULL
+	deleted_at
+	TIMESTAMPTZ
+	NULL (soft-delete)
+	created_at
+	TIMESTAMPTZ
+	NOT NULL, default now()
+	updated_at
+	TIMESTAMPTZ
+	NOT NULL, default now()
+	Tabela: providers (Prestador)
+Coluna
+	Tipo
+	Restrições
+	id
+	UUID (PK, FK → profiles.id)
+	NOT NULL
+	business_name
+	VARCHAR(255)
+	NOT NULL
+	category
+	ENUM (ServiceCategory)
+	NOT NULL
+	description
+	TEXT
+	NULL
+	center_lat
+	FLOAT
+	NOT NULL
+	center_lng
+	FLOAT
+	NOT NULL
+	radius_km
+	FLOAT
+	NOT NULL
+	location
+	GEOMETRY(POINT, 4326)
+	NOT NULL — índice GiST
+	subscription_status
+	ENUM (active, inactive, suspended)
+	NOT NULL, default active
+	contact_whatsapp
+	VARCHAR(20)
+	NULL
+	experience_years
+	INTEGER
+	NULL
+	services
+	TEXT[]
+	NULL
+	created_at / updated_at
+	TIMESTAMPTZ
+	NOT NULL
+	Tabela: reviews (Avaliações)
+Coluna
+	Tipo
+	Restrições
+	id
+	UUID (PK)
+	NOT NULL
+	provider_id
+	UUID (FK → providers.id)
+	NOT NULL, índice
+	resident_id
+	UUID (FK → profiles.id)
+	NOT NULL
+	rating
+	INTEGER
+	NOT NULL, CHECK (1 ≤ rating ≤ 5)
+	comment
+	TEXT
+	NULL
+	verified_hire
+	BOOLEAN
+	NOT NULL, default false
+	provider_response
+	TEXT
+	NULL
+	responded_at
+	TIMESTAMPTZ
+	NULL
+	deleted_at
+	TIMESTAMPTZ
+	NULL (soft-delete)
+	created_at
+	TIMESTAMPTZ
+	NOT NULL
+	Tabela: hires (Contratações)
+Coluna
+	Tipo
+	Restrições
+	id
+	UUID (PK)
+	NOT NULL
+	resident_id
+	UUID (FK → profiles.id)
+	NOT NULL, índice
+	provider_id
+	UUID (FK → providers.id)
+	NOT NULL, índice
+	hired_at
+	TIMESTAMPTZ
+	NOT NULL
+	estimated_value
+	NUMERIC(10,2)
+	NULL
+	source_type
+	VARCHAR(20)
+	NOT NULL
+	created_at
+	TIMESTAMPTZ
+	NOT NULL
+	Tabela: provider_events (Métricas de Engajamento)
+Coluna
+	Tipo
+	Restrições
+	id
+	UUID (PK)
+	NOT NULL
+	provider_id
+	UUID (FK → providers.id)
+	NOT NULL
+	event_type
+	VARCHAR(50)
+	NOT NULL (PROFILE_VIEW, CONTACT_CLICK, OUT_OF_AREA)
+	out_of_area
+	BOOLEAN
+	NULL
+	created_at
+	TIMESTAMPTZ
+	NOT NULL
+	8.2 Integridade de Dados e Restrições (Constraints)
+As seguintes regras de negócio foram implementadas diretamente no banco de dados:
+            * UNIQUE em cpf_hash e email na tabela profiles: impede dois usuários com mesmo CPF ou e-mail.
+            * CHECK (rating >= 1 AND rating <= 5) na tabela reviews: garante que notas fora do intervalo válido sejam rejeitadas pelo banco.
+            * Chave estrangeira providers.id → profiles.id: um prestador só pode existir se houver um perfil associado.
+            * Chaves estrangeiras em reviews (provider_id → providers.id, resident_id → profiles.id): nenhuma avaliação pode referenciar prestador ou morador inexistente.
+            * Trigger update_updated_at: atualiza automaticamente o campo updated_at em profiles e providers a cada modificação.
+            * Row Level Security (RLS) nas três tabelas principais:
+            * profiles: leitura de perfis não deletados; escrita apenas do próprio perfil (id = auth.uid()).
+            * providers: leitura apenas de prestadores com subscription_status = active; escrita apenas do próprio perfil.
+            * reviews: leitura de avaliações não deletadas; inserção apenas por moradores verificados (user_type = 'morador').
+8.3 Consultas de Negócio e Análise de Dados
+Consulta 1 — Prestadores mais bem avaliados por categoria (Ranking):
+SELECT
+    p.id,
+    p.business_name,
+    p.category,
+    ROUND(AVG(r.rating)::numeric, 2) AS avg_rating,
+    COUNT(r.id) AS total_reviews
+FROM providers p
+JOIN reviews r ON r.provider_id = p.id
+WHERE r.deleted_at IS NULL
+GROUP BY p.id, p.business_name, p.category
+HAVING COUNT(r.id) >= 2
+ORDER BY p.category, avg_rating DESC;
+
+
+Consulta 2 — Prestadores próximos a uma coordenada (busca geoespacial):
+SELECT
+    p.id,
+    p.business_name,
+    p.category,
+    ST_Distance(
+        p.location::geography,
+        ST_SetSRID(ST_MakePoint(-46.6333, -23.5505), 4326)::geography
+    ) / 1000 AS distance_km
+FROM providers p
+WHERE
+    p.subscription_status = 'active'
+    AND ST_DWithin(
+        p.location::geography,
+        ST_SetSRID(ST_MakePoint(-46.6333, -23.5505), 4326)::geography,
+        10000  -- 10 km em metros
+    )
+ORDER BY distance_km;
+
+
+Consulta 3 — Métricas de engajamento por prestador (últimos 30 dias):
+SELECT
+    pr.id AS provider_id,
+    pr.business_name,
+    SUM(CASE WHEN pe.event_type = 'PROFILE_VIEW' THEN 1 ELSE 0 END) AS profile_views,
+    SUM(CASE WHEN pe.event_type = 'CONTACT_CLICK' THEN 1 ELSE 0 END) AS contact_clicks,
+    SUM(CASE WHEN pe.event_type = 'OUT_OF_AREA' THEN 1 ELSE 0 END) AS out_of_area_requests
+FROM providers pr
+LEFT JOIN provider_events pe
+    ON pe.provider_id = pr.id
+    AND pe.created_at >= NOW() - INTERVAL '30 days'
+GROUP BY pr.id, pr.business_name
+ORDER BY contact_clicks DESC;
+
+9. Conclusão do Ciclo 2
+9.1 Perspectiva Consolidada: Da Prototipação à Implementação Profissional
+O encerramento do Ciclo 2 consolidou a transição do VizinhoPro de uma estrutura estática para um ecossistema de três camadas devidamente conteinerizado. A plataforma agora integra persistência de dados efetiva, autenticação robusta via tokens JWT e buscas geoespaciais com indexação, sustentadas por uma API que formaliza a comunicação entre as frentes de desenvolvimento.
+A reorientação estratégica foi determinante: ao transcender o modelo de comunidades fechadas, o produto expandiu seu potencial geográfico e removeu gargalos operacionais de aprovação manual, posicionando-se como um marketplace de serviços locais genuinamente dinâmico.
+9.2 Pilares de Sustentação: Infraestrutura Docker e PostgreSQL
+            * Confiabilidade: A adoção de políticas RLS no PostgreSQL assegura a integridade sistêmica e veda o acesso indevido a dados de terceiros de forma nativa.
+            * Escalabilidade: O isolamento em containers viabiliza o crescimento modular dos serviços, enquanto índices PostGIS mantêm a performance das consultas espaciais em larga escala.
+            * Portabilidade: A padronização via Docker permite a replicação imediata do ambiente operacional em diferentes estações, mitigando conflitos de configuração técnica.
+            * Segurança: O ecossistema de proteção é composto pela validação de JWT, aplicação de hashes irreversíveis e controles de acesso em nível de linha no banco de dados.
+9.3 Evolução e Próximos Passos
+            * Desenvolvimento de fluxos de notificação para monitoramento de novos contratos e interações.
+            * Criação de ferramentas para moderação e reporte de condutas inadequadas nas avaliações.
+            * Estruturação de painéis analíticos para prestadores, visando o acompanhamento de métricas de desempenho.
+            * Automação do selo de "avaliação verificada" mediante a confirmação do vínculo de contratação.
+            * Suporte para exibição de evidências visuais nos portfólios dos profissionais cadastrados.
+            * Análise de viabilidade para modelos de monetização e planos de destaque na plataforma.
+            * Otimização de rotinas geoespaciais para garantir estabilidade sob alta demanda de tráfego.
+
+
+10. Considerações Finais do Projeto
+10.1 Síntese dos Resultados Alcançados
+O VizinhoPro amadureceu de uma premissa restrita para uma solução tecnológica completa e geolocalizada. A integração entre FastAPI, PostgreSQL e React comprovou a eficácia técnica do projeto, resultando em um sistema seguro e apto para operação real dentro das metas estabelecidas.
+A decisão de pivotar no segundo ciclo, embora tenha demandado uma reestruturação profunda do backend, validou-se ao proporcionar maior competitividade e agilidade no ingresso de novos usuários ao ecossistema.
+10.2 Aprendizados Acadêmicos e Profissionais
+O processo de desenvolvimento evidenciou lições fundamentais:
+            * Planejamento Arquitetural: A necessidade de refatoração reforçou a importância de uma análise de negócio exaustiva antes da etapa de codificação.
+            * Complexidade Geoespacial: O domínio de tecnologias como PostGIS e lógica de posicionamento exigiu dedicação técnica, mas elevou a qualidade das funcionalidades de busca.
+            * Eficiência Operacional: A delegação da autenticação para serviços especializados e o uso de Docker otimizaram o tempo de desenvolvimento e a colaboração do grupo.
+            * Documentação como Ativo: O uso de contratos vivos de API facilitou a integração entre as equipes e minimizou divergências técnicas.
+10.3 Percepções sobre a Disciplina
+O Laboratório de Sistemas de Informação ofereceu uma imersão prática essencial, simulando os desafios de um ciclo de produto real. A metodologia baseada em iterações foi fundamental para priorizar o levantamento de requisitos e a prototipação antes da entrega de um software funcional com infraestrutura profissional.
+Sugestões de melhoria:
+            * Fomento à prática de testes automatizados como requisito formal de entrega.
+            * Estímulo ao uso de esteiras de CI/CD para modernização do fluxo de deploy.
+            * Incentivo a rodadas de testes de usabilidade com agentes externos ao projeto.
